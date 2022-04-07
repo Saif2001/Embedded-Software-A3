@@ -1,3 +1,4 @@
+
 #include <Arduino.h>
 
 #define SIGBPULSELENGTH 50
@@ -24,6 +25,15 @@ static const uint8_t msg_queue_len = 4;
 static QueueHandle_t msg_queue;
 static SemaphoreHandle_t t9Sem;
 
+
+  struct stateInfo {
+    int t2ButtonState;
+    float WaveFrequency;
+    float potAvg;
+    
+    };
+
+    
 void task1(void * parameters) {
   for(;;){
   digitalWrite(sigB, HIGH);       //Function to set Signal B high for 50 micro-s
@@ -63,6 +73,8 @@ void task4(void * parameters) {
 void task5(void * parameters) {
 
   for(;;){
+
+    
   int valFromQueue = analogRead(pot);
 
   
@@ -138,8 +150,11 @@ void task8(void * parameters) {
     }
   }
 
+
 void task9(void * parameters) {
   for(;;){
+
+  /*
   Serial.println("");
   Serial.print("Digital Button State,");    //Table headings
   Serial.print("\t\t");   //Necessary to space columns
@@ -154,7 +169,20 @@ void task9(void * parameters) {
   Serial.print(",\t\t\t");
   Serial.print(analogAvg);
   Serial.print(",");
+ */
 
+stateInfo s1 = {.t2ButtonState = buttonState, .WaveFrequency = sqWaveFreq, .potAvg = analogAvg};
+
+char buf[10];
+
+sprintf(buf, "%d", s1.potAvg);
+
+Serial.println(strcat("Button State: %d", sprintf(buf, "%d", s1.potAvg)));
+//Serial.println("Wave Frequency: %f", s1.WaveFrequency);
+//Serial.println("Averaged Pot Value: %f", s1.potAvg);
+
+
+  
   vTaskDelay(5000/portTICK_PERIOD_MS);
     }
   }
@@ -173,16 +201,9 @@ void task9(void * parameters) {
 
   msg_queue = xQueueCreate(msg_queue_len, sizeof(int));
 
-  xTaskCreatePinnedToCore(task5,
-                          "Task 5",
-                          2000,
-                          NULL,
-                          5,
-                          NULL,
-                          1);
 
                           
-  t9Sem = xSemaphoreCreateCounting(2, 0);
+  t9Sem = xSemaphoreCreateCounting(1, 0);
 
     
     xTaskCreate(
@@ -263,7 +284,7 @@ void task9(void * parameters) {
       "Task 9", //Task name
       2000,     //Stack size
       NULL,     //Task Parameters
-      4,          //Priority
+      1,          //Priority
       NULL      //Task handle
       );
       
