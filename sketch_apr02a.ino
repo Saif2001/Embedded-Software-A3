@@ -1,4 +1,3 @@
-
 #include <Arduino.h>
 
 #define SIGBPULSELENGTH 50
@@ -56,7 +55,8 @@ void task3(void * parameters) {
   for(;;){
     sqWaveDuration = pulseIn(t3Input, LOW, 2500) * 2;    //Find pulse duration
     if(sqWaveDuration != 0){        //Prevents Div0 Errors
-    sqWaveFreq = (1/(sqWaveDuration)) * 1000000 * 1.06;   //Find frequency and correct
+    sqWaveFreq = (1/(sqWaveDuration)) * 1000000;   //Find frequency and correct
+    
   }
   vTaskDelay(1000/portTICK_PERIOD_MS);
     }
@@ -100,8 +100,7 @@ if((task4Count % 4) == 0){
   analogAvg = (oldAnalogVals[0] + oldAnalogVals[1] + oldAnalogVals[2] + oldAnalogVals[3])/4;
 
   xQueueSend(msg_queue, (void *)&analogAvg, (TickType_t) 0);
-  //Serial.println(analogAvg);
- 
+  Serial.print("");
   vTaskDelay(42/portTICK_PERIOD_MS);
 
   
@@ -125,8 +124,8 @@ void task7(void * parameters) {
 
   int receivedAvg;
 
-  xQueueReceive(msg_queue, (void *)&receivedAvg, (TickType_t) 5);
-Serial.println(receivedAvg);
+  xQueueReceive(msg_queue, (void *)&receivedAvg, (TickType_t) 10);
+//Serial.println(receivedAvg);
     
   if(receivedAvg >= 2048) {
     error_code = 1;
@@ -177,13 +176,14 @@ stateInfo s1 = {.t2ButtonState = buttonState, .WaveFrequency = sqWaveFreq, .potA
 
 //Serial.println(strcat("Button State: %d", sprintf(buf, "%d", s1.potAvg)));
 
+if(buttonState == 1){
 Serial.print("Button State: "); Serial.print(s1.t2ButtonState);
 Serial.println("");
 Serial.print("Wave Frequency: "); Serial.print(s1.WaveFrequency);
 Serial.println("");
-Serial.print("Averaged Analog Value"); Serial.print(s1.potAvg);
+Serial.print("Averaged Analog Value: "); Serial.print(s1.potAvg);
 Serial.println("");
-
+}
 
   
   vTaskDelay(5000/portTICK_PERIOD_MS);
