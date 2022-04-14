@@ -154,32 +154,35 @@ void task8(void * parameters) {
 void task9(void * parameters) {
   for(;;){
 
-  /*
-  Serial.println("");
-  Serial.print("Digital Button State,");    //Table headings
-  Serial.print("\t\t");   //Necessary to space columns
-  Serial.print("Frequency (Hz),");
-  Serial.print("\t\t");
-  Serial.print("Average Potentiometer Value,");
-
-  Serial.println("");
-  Serial.print(buttonState);    //Variable values
-  Serial.print(",\t\t\t\t");    //Additional spacing as necessary
-  Serial.print(sqWaveFreq);
-  Serial.print(",\t\t\t");
-  Serial.print(analogAvg);
-  Serial.print(",");
- */
+  
+  //Serial.println("");
+  //Serial.print("Digital Button State,");    //Table headings
+  //Serial.print("\t\t");   //Necessary to space columns
+  //Serial.print("Frequency (Hz),");
+  //Serial.print("\t\t");
+  //Serial.print("Average Potentiometer Value,");
+  //Serial.println("");
+  //Serial.print(buttonState);    //Variable values
+  //Serial.print(",\t\t\t\t");    //Additional spacing as necessary
+  //Serial.print(sqWaveFreq);
+  //Serial.print(",\t\t\t");
+  //Serial.print(analogAvg);
+  //Serial.print(",");
+ 
 
 stateInfo s1 = {.t2ButtonState = buttonState, .WaveFrequency = sqWaveFreq, .potAvg = analogAvg};
 
-char buf[10];
 
-sprintf(buf, "%d", s1.potAvg);
+//sprintf(buf, "%d", s1.potAvg);
 
-Serial.println(strcat("Button State: %d", sprintf(buf, "%d", s1.potAvg)));
-//Serial.println("Wave Frequency: %f", s1.WaveFrequency);
-//Serial.println("Averaged Pot Value: %f", s1.potAvg);
+//Serial.println(strcat("Button State: %d", sprintf(buf, "%d", s1.potAvg)));
+
+Serial.print("Button State: "); Serial.print(s1.t2ButtonState);
+Serial.println("");
+Serial.print("Wave Frequency: "); Serial.print(s1.WaveFrequency);
+Serial.println("");
+Serial.print("Averaged Analog Value"); Serial.print(s1.potAvg);
+Serial.println("");
 
 
   
