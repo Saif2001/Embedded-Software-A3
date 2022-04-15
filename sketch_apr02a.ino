@@ -1,6 +1,3 @@
-//Saif Saleem H00272857
-//This program is a FreeRTOS conversion of Embedded Software Assignment 2, with some additional changes according to labsheet specifications. 
-
 #include <Arduino.h>
 
 #define SIGBPULSELENGTH 50
@@ -147,7 +144,8 @@ void task8(void * parameters) {
 
 void task9(void * parameters) {
   for(;;){
- 
+
+  xSemaphoreTake(t9Sem, (TickType_t) 1);
 //Struct variables updated
     stateInfo s1 = {.t2ButtonState = buttonState, .WaveFrequency = sqWaveFreq, .potAvg = analogAvg};
     
@@ -163,6 +161,8 @@ void task9(void * parameters) {
     }
     
       vTaskDelay(5000/portTICK_PERIOD_MS);
+
+      xSemaphoreGive(t9Sem);
     }
   }
   
